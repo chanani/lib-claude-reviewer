@@ -1,0 +1,95 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+group = 'io.github.chanani'
+version = '1.0.0'
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // GitHub API
+    api 'org.kohsuke:github-api:1.319'
+
+    // HTTP Client
+    api 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    // JSON
+    api 'com.google.code.gson:gson:2.10.1'
+
+    // Lombok (보일러플레이트 코드 제거)
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom {
+                name = 'Claude PR Reviewer'
+                description = 'A library for automated code review using Claude AI'
+                url = 'https://github.com/chanani/claude-pr-reviewer'
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'chanani'
+                        name = 'Chanani'
+                        email = 'your-email@example.com'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/chanani/claude-pr-reviewer.git'
+                    developerConnection = 'scm:git:ssh://github.com/chanani/claude-pr-reviewer.git'
+                    url = 'https://github.com/chanani/claude-pr-reviewer'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = project.findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")
+                password = project.findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}

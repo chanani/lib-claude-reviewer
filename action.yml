@@ -1,0 +1,65 @@
+name: 'Claude PR Reviewer'
+description: 'Claude AI를 사용한 자동 코드 리뷰'
+author: 'chanani'
+
+inputs:
+  github_token:
+    description: 'GitHub Token'
+    required: true
+  anthropic_api_key:
+    description: 'Anthropic API Key'
+    required: true
+  model:
+    description: 'Claude 모델'
+    required: false
+    default: 'claude-sonnet-4-5-20250929'
+  language:
+    description: '리뷰 언어 (ko/en)'
+    required: false
+    default: 'ko'
+  file_extensions:
+    description: '리뷰할 파일 확장자'
+    required: false
+    default: '.java,.kt,.xml,.gradle'
+  max_tokens:
+    description: '최대 토큰 수'
+    required: false
+    default: '2000'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Cache Gradle packages
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+    - name: Build with Gradle
+      shell: bash
+      run: |
+        cd ${{ github.action_path }}
+        chmod +x gradlew
+        ./gradlew shadowJar
+
+    - name: Run Reviewer
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        ANTHROPIC_API_KEY: ${{ inputs.anthropic_api_key }}
+        MODEL: ${{ inputs.model }}
+        LANGUAGE: ${{ inputs.language }}
+        FILE_EXTENSIONS: ${{ inputs.file_extensions }}
+        MAX_TOKENS: ${{ inputs.max_tokens }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        REPO_NAME: ${{ github.repository }}
+      run: |
+        java -jar ${{ github.action_path }}/build/libs/claude-reviewer-1.0.0.jar
