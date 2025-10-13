@@ -3,7 +3,7 @@
 ## 1. 사전 준비
 
 ### 1.1 Sonatype 계정 생성
-1. https://issues.sonatype.org 에서 계정 생성
+1. https://central.sonatype.com 에서 계정 생성
 2. 새 이슈 생성: "New Project"
 3. Group Id: `io.github.chanani` 입력
 4. GitHub 저장소 URL 제공

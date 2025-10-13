@@ -6,8 +6,6 @@ plugins {
 
 group = 'io.github.chanani'
 version = '1.0.0'
-sourceCompatibility = '21'
-targetCompatibility = '21'
 
 repositories {
     mavenCentral()
@@ -26,9 +24,20 @@ dependencies {
     // Lombok (보일러플레이트 코드 제거)
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
     withJavadocJar()
     withSourcesJar()
 }
@@ -83,6 +92,23 @@ publishing {
 }
 
 signing {
+    // 로컬 개발: GPG 에이전트 사용 (GPG 2.1+)
+    // GitHub Actions: 레거시 방식 (secring.gpg)
+    def signingKey = project.findProperty("signing.keyId") ?: System.getenv("SIGNING_KEY_ID")
+    def signingPassword = project.findProperty("signing.password") ?: System.getenv("SIGNING_PASSWORD")
+
+    if (signingKey && signingPassword) {
+        // GitHub Actions에서 실행 (secring.gpg 방식)
+        def signingKeyRingFile = project.findProperty("signing.secretKeyRingFile") ?: System.getenv("SIGNING_KEY_RING_FILE")
+        if (signingKeyRingFile) {
+            // 레거시 방식
+            useInMemoryPgpKeys(signingKey, new File(signingKeyRingFile).text, signingPassword)
+        }
+    } else if (project.hasProperty("signing.gnupg.keyName")) {
+        // 로컬 개발 (GPG 에이전트 방식)
+        useGpgCmd()
+    }
+
     sign publishing.publications.mavenJava
 }
 
