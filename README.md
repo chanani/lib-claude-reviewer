@@ -96,18 +96,33 @@ Builder에서 값을 설정하지 않으면 자동으로 환경 변수에서 읽
 | `PR_NUMBER` | `.prNumber()` | ✅ 필수 |
 | `REPO_NAME` | `.repoName()` | ✅ 필수 |
 
-### 2. GitHub Actions로 사용
+### 2. GitHub Actions로 사용 (PR 자동 리뷰)
 
-다른 사용자들이 이 라이브러리를 GitHub Actions에서 사용하려면:
+⚠️ **중요: Workflow 파일 생성은 필수입니다!**
 
-#### 단계 1: Anthropic API Key를 GitHub Secrets에 추가
-1. GitHub 저장소 → Settings → Secrets and variables → Actions
-2. "New repository secret" 클릭
-3. Name: `ANTHROPIC_API_KEY`
-4. Secret: 당신의 Claude API 키 입력
+GitHub Actions에서 자동 PR 리뷰를 사용하려면 아래 2단계가 필요합니다:
 
-#### 단계 2: Workflow 파일 생성
-`.github/workflows/pr-review.yml`:
+---
+
+#### 단계 1: GitHub Secrets에 API Key 추가
+
+1. GitHub 저장소 페이지로 이동
+2. **Settings** → **Secrets and variables** → **Actions**
+3. **"New repository secret"** 클릭
+4. 아래 정보 입력:
+   - **Name**: `ANTHROPIC_API_KEY`
+   - **Secret**: 당신의 Claude API 키 (예: `sk-ant-...`)
+5. **Add secret** 클릭
+
+---
+
+#### 단계 2: Workflow 파일 생성 (필수!)
+
+**프로젝트 루트에** 아래 파일을 생성하세요:
+
+**파일 경로**: `.github/workflows/pr-review.yml`
+
+**파일 내용**:
 ```yaml
 name: AI PR Review
 
@@ -123,23 +138,39 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Claude PR Review
-        uses: chanani/lib-claude-reviewer@main  # 또는 @v1.0.4 (Release 생성 후)
+        uses: chanani/lib-claude-reviewer@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          language: 'ko'  # 선택 사항: 'en' 또는 'ko'
-          file_extensions: '.java,.kt,.xml,.gradle'  # 선택 사항
 ```
 
-#### 작동 방식
-- PR이 생성되거나 업데이트될 때 자동으로 실행됩니다
-- Claude AI가 변경된 코드를 분석합니다
-- PR에 자동으로 리뷰 댓글을 작성합니다
-- **prNumber와 repoName은 자동으로 감지됩니다!**
+> 💡 **참고**:
+> - `GITHUB_TOKEN`은 GitHub가 자동 제공하므로 Secrets에 추가할 필요 없습니다
+> - `language`는 기본값 `ko`(한국어), 영어 원하면 `language: 'en'` 추가
+> - `file_extensions`는 기본값 `.java,.kt,.xml,.gradle`, 변경 원하면 추가
+
+---
+
+#### 단계 3: Git에 커밋 & 푸시
+
+```bash
+git add .github/workflows/pr-review.yml
+git commit -m "Add AI PR review workflow"
+git push
+```
+
+---
+
+#### 완료! 이제 작동합니다 ✅
+
+- ✅ PR 생성/업데이트 시 **자동으로** Claude가 코드 리뷰
+- ✅ PR에 **자동으로** 리뷰 댓글 작성
+- ✅ `.java`, `.kt`, `.xml`, `.gradle` 파일만 리뷰
+- ✅ **PR 번호와 저장소 이름은 자동 감지**
 
 ## 아키텍처
 
