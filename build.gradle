@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'io.github.chanani'
-version = '1.0.2'
+version = '1.0.3'
 
 application {
     mainClass = 'com.reviewer.ClaudeReviewerApplication'
@@ -56,7 +56,7 @@ publishing {
             pom {
                 name = 'Claude PR Reviewer'
                 description = 'A library for automated code review using Claude AI'
-                url = 'https://github.com/chanani/claude-pr-reviewer'
+                url = 'https://github.com/chanani/lib-claude-reviewer'
 
                 licenses {
                     license {
@@ -74,9 +74,9 @@ publishing {
                 }
 
                 scm {
-                    connection = 'scm:git:git://github.com/chanani/claude-reviewer.git'
-                    developerConnection = 'scm:git:ssh://github.com/chanani/claude-reviewer.git'
-                    url = 'https://github.com/chanani/claude-pr-reviewer'
+                    connection = 'scm:git:git://github.com/chanani/lib-claude-reviewer.git'
+                    developerConnection = 'scm:git:ssh://github.com/chanani/lib-claude-reviewer.git'
+                    url = 'https://github.com/chanani/lib-claude-reviewer'
                 }
             }
         }
