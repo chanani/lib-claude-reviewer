@@ -89,7 +89,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Claude PR Review
-        uses: chanani/claude-pr-reviewer@v1
+        uses: chanani/claude-pr-reviewer@main  # 또는 @v1 (Release 생성 후)
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
