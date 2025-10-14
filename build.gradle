@@ -1,11 +1,17 @@
 plugins {
     id 'java-library'
+    id 'application'
     id 'maven-publish'
     id 'signing'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'io.github.chanani'
-version = '1.0.0'
+version = '1.0.2'
+
+application {
+    mainClass = 'com.reviewer.ClaudeReviewerApplication'
+}
 
 repositories {
     mavenCentral()
@@ -68,8 +74,8 @@ publishing {
                 }
 
                 scm {
-                    connection = 'scm:git:git://github.com/chanani/claude-pr-reviewer.git'
-                    developerConnection = 'scm:git:ssh://github.com/chanani/claude-pr-reviewer.git'
+                    connection = 'scm:git:git://github.com/chanani/claude-reviewer.git'
+                    developerConnection = 'scm:git:ssh://github.com/chanani/claude-reviewer.git'
                     url = 'https://github.com/chanani/claude-pr-reviewer'
                 }
             }

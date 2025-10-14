@@ -13,7 +13,7 @@ Claude PR Reviewer에 기여해주셔서 감사합니다! 🎉
 ### 2. Fork & Clone
 ```bash
 # 저장소 Fork 후
-git clone https://github.com/YOUR_USERNAME/claude-pr-reviewer.git
+git clone https://github.com/YOUR_USERNAME/claude-reviewer.git
 cd claude-pr-reviewer
 ```
 

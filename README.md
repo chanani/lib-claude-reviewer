@@ -17,7 +17,7 @@ Java + DI 패턴으로 구현한 Claude AI 자동 코드 리뷰 라이브러리
 ### Gradle
 ```gradle
 dependencies {
-    implementation 'io.github.chanani:claude-reviewer:1.0.0'
+    implementation 'io.github.chanani:claude-reviewer:1.0.2'
 }
 ```
 
@@ -26,7 +26,7 @@ dependencies {
 <dependency>
     <groupId>io.github.chanani</groupId>
     <artifactId>claude-reviewer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -34,6 +34,25 @@ dependencies {
 
 ### 1. 라이브러리로 사용 (권장)
 
+#### 방법 1: 환경 변수 사용 (GitHub Actions에서 자동)
+```java
+import com.reviewer.ClaudeReviewer;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        // 환경 변수에서 자동으로 읽음:
+        // - GITHUB_TOKEN
+        // - ANTHROPIC_API_KEY
+        // - PR_NUMBER
+        // - REPO_NAME
+        ClaudeReviewer.builder()
+                .build()
+                .executeFullReview();
+    }
+}
+```
+
+#### 방법 2: 코드에서 직접 설정
 ```java
 import com.reviewer.ClaudeReviewer;
 
@@ -67,8 +86,27 @@ public class Main {
 }
 ```
 
+#### 환경 변수 자동 감지
+Builder에서 값을 설정하지 않으면 자동으로 환경 변수에서 읽습니다:
+
+| 환경 변수 | Builder 메서드 | 필수 여부 |
+|---------|--------------|---------|
+| `GITHUB_TOKEN` | `.githubToken()` | ✅ 필수 |
+| `ANTHROPIC_API_KEY` | `.anthropicApiKey()` | ✅ 필수 |
+| `PR_NUMBER` | `.prNumber()` | ✅ 필수 |
+| `REPO_NAME` | `.repoName()` | ✅ 필수 |
+
 ### 2. GitHub Actions로 사용
 
+다른 사용자들이 이 라이브러리를 GitHub Actions에서 사용하려면:
+
+#### 단계 1: Anthropic API Key를 GitHub Secrets에 추가
+1. GitHub 저장소 → Settings → Secrets and variables → Actions
+2. "New repository secret" 클릭
+3. Name: `ANTHROPIC_API_KEY`
+4. Secret: 당신의 Claude API 키 입력
+
+#### 단계 2: Workflow 파일 생성
 `.github/workflows/pr-review.yml`:
 ```yaml
 name: AI PR Review
@@ -89,13 +127,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Claude PR Review
-        uses: chanani/claude-pr-reviewer@main  # 또는 @v1 (Release 생성 후)
+        uses: chanani/claude-pr-reviewer@main  # 또는 @v1.0.2 (Release 생성 후)
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          language: 'ko'
-          file_extensions: '.java,.kt,.xml,.gradle'
+          language: 'ko'  # 선택 사항: 'en' 또는 'ko'
+          file_extensions: '.java,.kt,.xml,.gradle'  # 선택 사항
 ```
+
+#### 작동 방식
+- PR이 생성되거나 업데이트될 때 자동으로 실행됩니다
+- Claude AI가 변경된 코드를 분석합니다
+- PR에 자동으로 리뷰 댓글을 작성합니다
+- **prNumber와 repoName은 자동으로 감지됩니다!**
 
 ## 아키텍처
 

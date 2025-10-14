@@ -47,7 +47,7 @@ git commit -m "feat: initial commit - Claude PR Reviewer library
 - 완전한 문서화 및 예제 포함"
 
 # 원격 저장소 연결 (YOUR_USERNAME을 실제 사용자명으로 변경)
-git remote add origin https://github.com/YOUR_USERNAME/claude-pr-reviewer.git
+git remote add origin https://github.com/YOUR_USERNAME/claude-reviewer.git
 
 # 브랜치 이름 확인 및 변경
 git branch -M main
@@ -155,7 +155,7 @@ README.md 상단에 추가:
    Issue Type: New Project
    Group Id: io.github.YOUR_USERNAME
    Project URL: https://github.com/YOUR_USERNAME/claude-pr-reviewer
-   SCM url: https://github.com/YOUR_USERNAME/claude-pr-reviewer.git
+   SCM url: https://github.com/YOUR_USERNAME/claude-reviewer.git
    ```
 3. 승인 대기 (1-2일)
 
