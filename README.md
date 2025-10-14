@@ -1,16 +1,6 @@
 # Claude PR Reviewer 🤖
 
-Java + DI 패턴으로 구현한 Claude AI 자동 코드 리뷰 라이브러리
-
-## 특징
-
-- ✅ **Maven Central 배포** - 간단한 의존성 주입으로 사용
-- ✅ 완전한 의존성 주입 (DI) 패턴
-- ✅ 계층화된 서비스 구조
-- ✅ Gradle 빌드 시스템
-- ✅ Lombok으로 보일러플레이트 제거
-- ✅ 설정 가능한 옵션들
-- ✅ Java 21 지원
+Claude AI 자동 코드 리뷰 라이브러리
 
 ## 설치
 
@@ -32,19 +22,14 @@ dependencies {
 
 ## 사용 방법
 
-### 1. 라이브러리로 사용 (권장)
+### 1. 라이브러리로 사용
 
-#### 방법 1: 환경 변수 사용 (GitHub Actions에서 자동)
+환경 변수 사용 (GitHub Actions에서 자동)
 ```java
 import com.reviewer.ClaudeReviewer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        // 환경 변수에서 자동으로 읽음:
-        // - GITHUB_TOKEN
-        // - ANTHROPIC_API_KEY
-        // - PR_NUMBER
-        // - REPO_NAME
         ClaudeReviewer.builder()
                 .build()
                 .executeFullReview();
@@ -52,49 +37,7 @@ public class Main {
 }
 ```
 
-#### 방법 2: 코드에서 직접 설정
-```java
-import com.reviewer.ClaudeReviewer;
 
-public class Main {
-    public static void main(String[] args) throws Exception {
-        // ClaudeReviewer 인스턴스 생성
-        ClaudeReviewer reviewer = ClaudeReviewer.builder()
-                .githubToken("ghp_xxxxxxxxxxxx")
-                .anthropicApiKey("sk-ant-xxxxxxxxxxxx")
-                .repoName("owner/repository")
-                .prNumber(123)
-                .language("ko")  // 또는 "en"
-                .fileExtensions(".java,.kt,.xml,.gradle")
-                .build();
-
-        // 방법 1: 리뷰만 받기
-        String reviewText = reviewer.reviewPullRequest();
-        System.out.println(reviewText);
-
-        // 방법 2: 리뷰하고 자동으로 댓글 작성
-        reviewer.executeFullReview();
-
-        // 방법 3: 수동으로 댓글 작성
-        String review = reviewer.reviewPullRequest();
-        reviewer.postReviewComment(review);
-
-        // 방법 4: 변경된 파일 목록만 조회
-        List<FileChange> files = reviewer.getChangedFiles();
-        files.forEach(f -> System.out.println(f.getFilename()));
-    }
-}
-```
-
-#### 환경 변수 자동 감지
-Builder에서 값을 설정하지 않으면 자동으로 환경 변수에서 읽습니다:
-
-| 환경 변수 | Builder 메서드 | 필수 여부 |
-|---------|--------------|---------|
-| `GITHUB_TOKEN` | `.githubToken()` | ✅ 필수 |
-| `ANTHROPIC_API_KEY` | `.anthropicApiKey()` | ✅ 필수 |
-| `PR_NUMBER` | `.prNumber()` | ✅ 필수 |
-| `REPO_NAME` | `.repoName()` | ✅ 필수 |
 
 ### 2. GitHub Actions로 사용 (PR 자동 리뷰)
 
@@ -167,23 +110,12 @@ git push
 
 #### 완료! 이제 작동합니다 ✅
 
-- ✅ PR 생성/업데이트 시 **자동으로** Claude가 코드 리뷰
+- ✅ PR 생성/업데이트 시 **자동으로** Claude 코드 리뷰
 - ✅ PR에 **자동으로** 리뷰 댓글 작성
 - ✅ `.java`, `.kt`, `.xml`, `.gradle` 파일만 리뷰
-- ✅ **PR 번호와 저장소 이름은 자동 감지**
 
-## 아키텍처
 
-```
-ClaudeReviewerApplication (Main)
-    ↓
-ServiceFactory (DI Container)
-    ↓
-ReviewService (Facade)
-    ↓
-├── GitHubService
-└── ClaudeService
-```
+
 
 ## API 레퍼런스
 
@@ -199,34 +131,6 @@ ReviewService (Facade)
 - `fileExtensions(String)` - 리뷰할 파일 확장자 (기본값: .java,.kt,.xml,.gradle)
 - `maxTokens(int)` - 최대 토큰 수 (기본값: 2000)
 
-#### 주요 메서드
-- `String reviewPullRequest()` - PR 리뷰 수행 및 결과 반환
-- `void postReviewComment(String)` - PR에 댓글 작성
-- `List<FileChange> getChangedFiles()` - 변경된 파일 목록 조회
-- `void executeFullReview()` - 리뷰 수행 + 자동 댓글 작성
-
-## 프로젝트 구조
-
-```
-claude-pr-reviewer/
-├── action.yml                  # GitHub Actions 정의
-├── build.gradle                # Maven Central 배포 설정
-├── gradle.properties           # Gradle 설정
-├── PUBLISHING.md              # 배포 가이드
-└── src/main/java/com/reviewer/
-    ├── ClaudeReviewer.java    # 공개 API (메인 진입점)
-    ├── ClaudeReviewerApplication.java  # CLI 실행용
-    ├── config/
-    │   └── ReviewConfig.java
-    ├── model/
-    │   └── FileChange.java
-    ├── service/
-    │   ├── GitHubService.java
-    │   ├── ClaudeService.java
-    │   └── ReviewService.java
-    └── di/
-        └── ServiceFactory.java
-```
 
 ## 배포 가이드
 
