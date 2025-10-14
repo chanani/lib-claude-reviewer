@@ -141,15 +141,36 @@ public class ClaudeReviewer {
         }
 
         public ClaudeReviewer build() throws IOException {
-            // 환경 변수 설정 (ReviewConfig.fromEnvironment()에서 사용)
-            System.setProperty("GITHUB_TOKEN", githubToken);
-            System.setProperty("ANTHROPIC_API_KEY", anthropicApiKey);
-            System.setProperty("PR_NUMBER", String.valueOf(prNumber));
-            System.setProperty("REPO_NAME", repoName);
-            System.setProperty("MODEL", model);
-            System.setProperty("LANGUAGE", language);
-            System.setProperty("FILE_EXTENSIONS", fileExtensions);
-            System.setProperty("MAX_TOKENS", String.valueOf(maxTokens));
+            // 환경 변수에서 자동 감지 (설정 안 된 경우)
+            if (githubToken == null) {
+                githubToken = System.getenv("GITHUB_TOKEN");
+            }
+            if (anthropicApiKey == null) {
+                anthropicApiKey = System.getenv("ANTHROPIC_API_KEY");
+            }
+            if (prNumber == 0) {
+                String prEnv = System.getenv("PR_NUMBER");
+                if (prEnv != null) {
+                    prNumber = Integer.parseInt(prEnv);
+                }
+            }
+            if (repoName == null) {
+                repoName = System.getenv("REPO_NAME");
+            }
+
+            // 필수 값 검증
+            if (githubToken == null || githubToken.isEmpty()) {
+                throw new IllegalStateException("GitHub token is required");
+            }
+            if (anthropicApiKey == null || anthropicApiKey.isEmpty()) {
+                throw new IllegalStateException("Anthropic API key is required");
+            }
+            if (prNumber == 0) {
+                throw new IllegalStateException("PR number is required");
+            }
+            if (repoName == null || repoName.isEmpty()) {
+                throw new IllegalStateException("Repository name is required");
+            }
 
             ReviewConfig config = ReviewConfig.builder()
                     .githubToken(githubToken)
