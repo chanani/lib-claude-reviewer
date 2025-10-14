@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'io.github.chanani'
-version = '1.0.3'
+version = '1.0.4'
 
 application {
     mainClass = 'com.reviewer.ClaudeReviewerApplication'

@@ -17,7 +17,7 @@ Java + DI 패턴으로 구현한 Claude AI 자동 코드 리뷰 라이브러리
 ### Gradle
 ```gradle
 dependencies {
-    implementation 'io.github.chanani:claude-reviewer:1.0.3'
+    implementation 'io.github.chanani:claude-reviewer:1.0.4'
 }
 ```
 
@@ -26,7 +26,7 @@ dependencies {
 <dependency>
     <groupId>io.github.chanani</groupId>
     <artifactId>claude-reviewer</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Claude PR Review
-        uses: chanani/lib-claude-reviewer@main  # 또는 @v1.0.3 (Release 생성 후)
+        uses: chanani/lib-claude-reviewer@main  # 또는 @v1.0.4 (Release 생성 후)
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}

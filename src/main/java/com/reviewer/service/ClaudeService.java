@@ -9,6 +9,7 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Claude AI 관련 서비스
@@ -26,7 +27,11 @@ public class ClaudeService {
      */
     public ClaudeService(ReviewConfig config) {
         this.config = config;
-        this.client = new OkHttpClient();
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(180, TimeUnit.SECONDS)    // 3분
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
         this.gson = new Gson();
     }
 

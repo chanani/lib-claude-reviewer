@@ -62,4 +62,4 @@ runs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
         REPO_NAME: ${{ github.repository }}
       run: |
-        java -jar ${{ github.action_path }}/build/libs/claude-reviewer-1.0.3-all.jar
+        java -jar ${{ github.action_path }}/build/libs/claude-reviewer-1.0.4-all.jar
