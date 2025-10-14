@@ -151,4 +151,4 @@ Pull Request는 언제나 환영합니다!
 
 ## 지원
 
-이슈가 있다면 [GitHub Issues](https://github.com/chanani/claude-pr-reviewer/issues)에 등록해주세요.
+이슈가 있다면 [GitHub Issues](https://github.com/chanani/lib-claude-reviewer/issues)에 등록해주세요.
