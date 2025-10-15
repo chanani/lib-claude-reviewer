@@ -17,6 +17,9 @@ public class ReviewConfig {
     private final int prNumber;
     private final String repoName;
 
+    // Gitea 지원
+    private final String giteaUrl;
+
     @Builder.Default
     private final String model = "claude-sonnet-4-5-20250929";
 
@@ -30,6 +33,13 @@ public class ReviewConfig {
     private final int maxTokens = 2000;
 
     /**
+     * 플랫폼 판별 (Gitea URL이 있으면 Gitea, 없으면 GitHub)
+     */
+    public boolean isGitea() {
+        return giteaUrl != null && !giteaUrl.isEmpty();
+    }
+
+    /**
      * 환경 변수에서 설정 생성
      */
     public static ReviewConfig fromEnvironment() {
@@ -40,6 +50,7 @@ public class ReviewConfig {
                 .anthropicApiKey(getRequiredEnv("ANTHROPIC_API_KEY"))
                 .prNumber(Integer.parseInt(getRequiredEnv("PR_NUMBER")))
                 .repoName(getRequiredEnv("REPO_NAME"))
+                .giteaUrl(getEnvOrDefault("GITEA_URL", null))
                 .model(getEnvOrDefault("MODEL", "claude-sonnet-4-5-20250929"))
                 .language(getEnvOrDefault("LANGUAGE", "ko"))
                 .fileExtensions(Arrays.asList(fileExts.split(",")))

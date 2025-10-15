@@ -9,14 +9,14 @@ import java.util.List;
  * 리뷰 프로세스를 조율하는 Facade 서비스
  */
 public class ReviewService {
-    private final GitHubService githubService;
+    private final GitService gitService;
     private final ClaudeService claudeService;
 
     /**
      * 생성자 주입
      */
-    public ReviewService(GitHubService githubService, ClaudeService claudeService) {
-        this.githubService = githubService;
+    public ReviewService(GitService gitService, ClaudeService claudeService) {
+        this.gitService = gitService;
         this.claudeService = claudeService;
     }
 
@@ -27,7 +27,7 @@ public class ReviewService {
         System.out.println("🔍 변경된 파일 확인 중...");
 
         // 1. 변경된 파일 가져오기
-        List<FileChange> changedFiles = githubService.getChangedFiles();
+        List<FileChange> changedFiles = gitService.getChangedFiles();
 
         if (changedFiles.isEmpty()) {
             System.out.println("ℹ️ 리뷰할 파일이 없습니다.");
@@ -40,9 +40,9 @@ public class ReviewService {
         System.out.println("🤖 AI 리뷰 진행 중...");
         String reviewText = claudeService.reviewCode(changedFiles);
 
-        // 3. GitHub PR에 댓글 작성
+        // 3. PR에 댓글 작성
         System.out.println("💬 리뷰 결과 게시 중...");
-        githubService.postComment("## 🤖 Claude AI Code Review\n\n" + reviewText);
+        gitService.postComment("## 🤖 Claude AI Code Review\n\n" + reviewText);
 
         System.out.println("✅ 리뷰 완료!");
     }

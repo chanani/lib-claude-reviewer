@@ -1,9 +1,7 @@
 package com.reviewer.di;
 
 import com.reviewer.config.ReviewConfig;
-import com.reviewer.service.ClaudeService;
-import com.reviewer.service.GitHubService;
-import com.reviewer.service.ReviewService;
+import com.reviewer.service.*;
 
 import java.io.IOException;
 
@@ -18,10 +16,15 @@ public class ServiceFactory {
     }
 
     /**
-     * GitHubService 인스턴스 생성
+     * GitService 인스턴스 생성
+     * 플랫폼에 따라 GitHubServiceImpl 또는 GiteaServiceImpl 반환
      */
-    public GitHubService createGitHubService() throws IOException {
-        return new GitHubService(config);
+    public GitService createGitService() throws IOException {
+        if (config.isGitea()) {
+            return new GiteaServiceImpl(config);
+        } else {
+            return new GitHubServiceImpl(config);
+        }
     }
 
     /**
@@ -35,8 +38,8 @@ public class ServiceFactory {
      * ReviewService 인스턴스 생성 (의존성 주입)
      */
     public ReviewService createReviewService() throws IOException {
-        GitHubService githubService = createGitHubService();
+        GitService gitService = createGitService();
         ClaudeService claudeService = createClaudeService();
-        return new ReviewService(githubService, claudeService);
+        return new ReviewService(gitService, claudeService);
     }
 }
