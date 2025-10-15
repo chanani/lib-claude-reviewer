@@ -24,41 +24,6 @@ dependencies {
 
 ### 1. 라이브러리로 사용
 
-#### GitHub 사용
-```java
-import com.reviewer.ClaudeReviewer;
-
-public class Main {
-    public static void main(String[] args) throws Exception {
-        ClaudeReviewer.builder()
-                .githubToken("ghp_xxx")
-                .anthropicApiKey("sk-ant-xxx")
-                .repoName("owner/repo")
-                .prNumber(123)
-                .build()
-                .executeFullReview();
-    }
-}
-```
-
-#### Gitea 사용
-```java
-import com.reviewer.ClaudeReviewer;
-
-public class Main {
-    public static void main(String[] args) throws Exception {
-        ClaudeReviewer.builder()
-                .giteaUrl("https://gitea.example.com")  // Gitea 서버 URL
-                .githubToken("gitea_token")             // Gitea Access Token
-                .anthropicApiKey("sk-ant-xxx")
-                .repoName("owner/repo")
-                .prNumber(123)
-                .build()
-                .executeFullReview();
-    }
-}
-```
-
 #### 환경 변수 사용 (GitHub Actions에서 자동)
 ```java
 import com.reviewer.ClaudeReviewer;
@@ -209,16 +174,10 @@ jobs:
       - name: Claude PR Review
         uses: chanani/lib-claude-reviewer@main
         with:
-          gitea_url: 'https://gitea.example.com'  # 당신의 Gitea 서버 URL
+          gitea_url: 'https://gitea.example.com'  # ⚠️ 필수: 당신의 Gitea 서버 URL로 변경
           github_token: ${{ secrets.GITEA_TOKEN }}  # Gitea Access Token
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}  # ⚠️ 필수: Secrets에 등록 필요
 ```
-
-> 💡 **참고**:
-> - `gitea_url`에 **실제 Gitea 서버 URL**을 입력하세요 (예: `https://git.mycompany.com`)
-> - `GITEA_TOKEN`은 Gitea가 자동 제공하는 경우가 많습니다. 수동 설정이 필요하면 Gitea Settings에서 생성하세요
-> - `language`는 기본값 `ko`(한국어), 영어 원하면 `language: 'en'` 추가
-> - `file_extensions`는 기본값 `.java,.kt,.xml,.gradle`, 변경 원하면 추가
 
 ---
 
