@@ -4,7 +4,7 @@ import com.reviewer.config.ReviewConfig;
 import com.reviewer.di.ServiceFactory;
 import com.reviewer.model.FileChange;
 import com.reviewer.service.ClaudeService;
-import com.reviewer.service.GitHubService;
+import com.reviewer.service.GitService;
 import com.reviewer.service.ReviewService;
 
 import java.io.IOException;
@@ -15,8 +15,18 @@ import java.util.List;
  *
  * 사용 예시:
  * <pre>{@code
+ * // GitHub
  * ClaudeReviewer reviewer = ClaudeReviewer.builder()
  *     .githubToken("ghp_xxx")
+ *     .anthropicApiKey("sk-ant-xxx")
+ *     .repoName("owner/repo")
+ *     .prNumber(123)
+ *     .build();
+ *
+ * // Gitea
+ * ClaudeReviewer reviewer = ClaudeReviewer.builder()
+ *     .giteaUrl("https://gitea.example.com")
+ *     .githubToken("gitea_token")
  *     .anthropicApiKey("sk-ant-xxx")
  *     .repoName("owner/repo")
  *     .prNumber(123)
@@ -27,13 +37,13 @@ import java.util.List;
  * }</pre>
  */
 public class ClaudeReviewer {
-    private final GitHubService githubService;
+    private final GitService gitService;
     private final ClaudeService claudeService;
     private final ReviewService reviewService;
 
     private ClaudeReviewer(ReviewConfig config) throws IOException {
         ServiceFactory factory = new ServiceFactory(config);
-        this.githubService = factory.createGitHubService();
+        this.gitService = factory.createGitService();
         this.claudeService = factory.createClaudeService();
         this.reviewService = factory.createReviewService();
     }
@@ -45,7 +55,7 @@ public class ClaudeReviewer {
      * @throws IOException API 호출 실패 시
      */
     public String reviewPullRequest() throws IOException {
-        List<FileChange> changedFiles = githubService.getChangedFiles();
+        List<FileChange> changedFiles = gitService.getChangedFiles();
 
         if (changedFiles.isEmpty()) {
             return "리뷰할 파일이 없습니다.";
@@ -61,7 +71,7 @@ public class ClaudeReviewer {
      * @throws IOException API 호출 실패 시
      */
     public void postReviewComment(String reviewComment) throws IOException {
-        githubService.postComment("## 🤖 Claude AI Code Review\n\n" + reviewComment);
+        gitService.postComment("## 🤖 Claude AI Code Review\n\n" + reviewComment);
     }
 
     /**
@@ -71,7 +81,7 @@ public class ClaudeReviewer {
      * @throws IOException API 호출 실패 시
      */
     public List<FileChange> getChangedFiles() throws IOException {
-        return githubService.getChangedFiles();
+        return gitService.getChangedFiles();
     }
 
     /**
@@ -95,6 +105,7 @@ public class ClaudeReviewer {
         private String anthropicApiKey;
         private int prNumber;
         private String repoName;
+        private String giteaUrl;  // Gitea 지원
         private String model = "claude-sonnet-4-5-20250929";
         private String language = "ko";
         private String fileExtensions = ".java,.kt,.xml,.gradle";
@@ -117,6 +128,11 @@ public class ClaudeReviewer {
 
         public Builder repoName(String repoName) {
             this.repoName = repoName;
+            return this;
+        }
+
+        public Builder giteaUrl(String giteaUrl) {
+            this.giteaUrl = giteaUrl;
             return this;
         }
 
@@ -157,6 +173,9 @@ public class ClaudeReviewer {
             if (repoName == null) {
                 repoName = System.getenv("REPO_NAME");
             }
+            if (giteaUrl == null) {
+                giteaUrl = System.getenv("GITEA_URL");
+            }
 
             // 필수 값 검증
             if (githubToken == null || githubToken.isEmpty()) {
@@ -177,6 +196,7 @@ public class ClaudeReviewer {
                     .anthropicApiKey(anthropicApiKey)
                     .prNumber(prNumber)
                     .repoName(repoName)
+                    .giteaUrl(giteaUrl)
                     .model(model)
                     .language(language)
                     .fileExtensions(java.util.Arrays.asList(fileExtensions.split(",")))

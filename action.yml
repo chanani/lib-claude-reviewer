@@ -9,6 +9,10 @@ inputs:
   anthropic_api_key:
     description: 'Anthropic API Key'
     required: true
+  gitea_url:
+    description: 'Gitea 서버 URL (Gitea 사용 시만 필요, 예: https://gitea.example.com)'
+    required: false
+    default: ''
   model:
     description: 'Claude 모델'
     required: false
@@ -55,6 +59,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         ANTHROPIC_API_KEY: ${{ inputs.anthropic_api_key }}
+        GITEA_URL: ${{ inputs.gitea_url }}
         MODEL: ${{ inputs.model }}
         LANGUAGE: ${{ inputs.language }}
         FILE_EXTENSIONS: ${{ inputs.file_extensions }}
@@ -62,4 +67,4 @@ runs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
         REPO_NAME: ${{ github.repository }}
       run: |
-        java -jar ${{ github.action_path }}/build/libs/claude-reviewer-1.0.4-all.jar
+        java -jar ${{ github.action_path }}/build/libs/claude-reviewer-1.0.5-all.jar
