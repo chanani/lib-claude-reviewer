@@ -9,6 +9,13 @@ import com.reviewer.service.ReviewService;
  */
 public class ClaudeReviewerApplication {
     /**
+     * 기본 생성자
+     */
+    private ClaudeReviewerApplication() {
+        // Utility class
+    }
+
+    /**
      * 메인 메서드
      *
      * @param args 명령줄 인수

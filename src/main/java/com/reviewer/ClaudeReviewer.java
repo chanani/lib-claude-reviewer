@@ -106,6 +106,12 @@ public class ClaudeReviewer {
      * ClaudeReviewer 빌더 클래스
      */
     public static class Builder {
+        /**
+         * Builder 기본 생성자
+         */
+        Builder() {
+        }
+
         private String githubToken;
         private String anthropicApiKey;
         private int prNumber;

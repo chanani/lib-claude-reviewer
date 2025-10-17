@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * 파일 변경 정보 DTO
+ *
+ * @author claude-reviewer
  */
 @Getter
 @AllArgsConstructor

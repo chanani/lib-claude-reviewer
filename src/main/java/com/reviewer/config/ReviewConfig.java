@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * 리뷰 설정 클래스
+ *
+ * @author claude-reviewer
  */
 @Getter
 @Builder
