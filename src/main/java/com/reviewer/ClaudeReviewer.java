@@ -3,8 +3,8 @@ package com.reviewer;
 import com.reviewer.config.ReviewConfig;
 import com.reviewer.di.ServiceFactory;
 import com.reviewer.model.FileChange;
-import com.reviewer.service.ClaudeService;
-import com.reviewer.service.GitService;
+import com.reviewer.service.claude.ClaudeService;
+import com.reviewer.service.git.GitService;
 import com.reviewer.service.ReviewService;
 
 import java.io.IOException;

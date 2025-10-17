@@ -1,6 +1,8 @@
 package com.reviewer.service;
 
 import com.reviewer.model.FileChange;
+import com.reviewer.service.claude.ClaudeService;
+import com.reviewer.service.git.GitService;
 
 import java.io.IOException;
 import java.util.List;

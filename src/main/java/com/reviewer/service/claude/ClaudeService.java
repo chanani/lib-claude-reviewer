@@ -1,4 +1,4 @@
-package com.reviewer.service;
+package com.reviewer.service.claude;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

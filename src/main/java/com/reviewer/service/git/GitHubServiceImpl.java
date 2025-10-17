@@ -1,4 +1,4 @@
-package com.reviewer.service;
+package com.reviewer.service.git;
 
 import com.reviewer.config.ReviewConfig;
 import com.reviewer.model.FileChange;

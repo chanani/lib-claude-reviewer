@@ -2,6 +2,10 @@ package com.reviewer.di;
 
 import com.reviewer.config.ReviewConfig;
 import com.reviewer.service.*;
+import com.reviewer.service.claude.ClaudeService;
+import com.reviewer.service.git.GitHubServiceImpl;
+import com.reviewer.service.git.GitService;
+import com.reviewer.service.git.GiteaServiceImpl;
 
 import java.io.IOException;
 
