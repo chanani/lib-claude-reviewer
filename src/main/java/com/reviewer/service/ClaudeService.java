@@ -8,7 +8,9 @@ import com.reviewer.model.FileChange;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,8 +41,21 @@ public class ClaudeService {
      * 시스템 프롬프트 생성
      */
     private String getSystemPrompt() {
+        Map<String, String> prompts = new HashMap<>();
+        initPrompts(prompts);
         if ("ko".equals(config.getLanguage())) {
-            return """
+            return prompts.get("ko");
+        } else {
+            return prompts.get("en");
+        }
+    }
+
+    /**
+     * 프롬프트 데이터 등록
+     */
+    private static void initPrompts(Map<String, String> prompts) {
+        prompts.put("ko",
+                """
                     경험 많은 시니어 개발자로서 코드 리뷰를 수행해줘.
 
                     리뷰 지침:
@@ -55,9 +70,10 @@ public class ClaudeService {
                     - 개선된 사항: [긍정적 언급]
                     - 주요 이슈: [문제점과 개선 방안]
                     - 전반적인 의견: [요약]
-                    """;
-        } else {
-            return """
+                    """
+        );
+        prompts.put("en",
+                """
                     As an experienced senior developer, perform a code review.
 
                     Review Guidelines:
@@ -72,8 +88,8 @@ public class ClaudeService {
                     - Improvements: [positive mentions]
                     - Key Issues: [problems and suggestions]
                     - Overall Opinion: [summary]
-                    """;
-        }
+                    """
+        );
     }
 
     /**
