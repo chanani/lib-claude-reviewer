@@ -16,6 +16,9 @@ public class ReviewService {
 
     /**
      * 생성자 주입
+     *
+     * @param gitService Git 플랫폼 서비스
+     * @param claudeService Claude AI 서비스
      */
     public ReviewService(GitService gitService, ClaudeService claudeService) {
         this.gitService = gitService;
@@ -24,6 +27,8 @@ public class ReviewService {
 
     /**
      * 리뷰 프로세스 실행
+     *
+     * @throws IOException API 호출 실패 시
      */
     public void executeReview() throws IOException {
         System.out.println("🔍 변경된 파일 확인 중...");

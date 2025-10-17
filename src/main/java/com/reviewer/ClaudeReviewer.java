@@ -94,12 +94,17 @@ public class ClaudeReviewer {
     }
 
     /**
-     * ClaudeReviewer 빌더
+     * ClaudeReviewer 빌더 인스턴스 생성
+     *
+     * @return Builder 인스턴스
      */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * ClaudeReviewer 빌더 클래스
+     */
     public static class Builder {
         private String githubToken;
         private String anthropicApiKey;
@@ -111,51 +116,111 @@ public class ClaudeReviewer {
         private String fileExtensions = ".java,.kt,.xml,.gradle";
         private int maxTokens = 2000;
 
+        /**
+         * GitHub 또는 Gitea Access Token 설정
+         *
+         * @param githubToken GitHub 또는 Gitea Access Token
+         * @return Builder 인스턴스
+         */
         public Builder githubToken(String githubToken) {
             this.githubToken = githubToken;
             return this;
         }
 
+        /**
+         * Anthropic API Key 설정
+         *
+         * @param anthropicApiKey Claude API Key
+         * @return Builder 인스턴스
+         */
         public Builder anthropicApiKey(String anthropicApiKey) {
             this.anthropicApiKey = anthropicApiKey;
             return this;
         }
 
+        /**
+         * Pull Request 번호 설정
+         *
+         * @param prNumber PR 번호
+         * @return Builder 인스턴스
+         */
         public Builder prNumber(int prNumber) {
             this.prNumber = prNumber;
             return this;
         }
 
+        /**
+         * 저장소 이름 설정 (예: "owner/repo")
+         *
+         * @param repoName 저장소 이름
+         * @return Builder 인스턴스
+         */
         public Builder repoName(String repoName) {
             this.repoName = repoName;
             return this;
         }
 
+        /**
+         * Gitea 서버 URL 설정 (Gitea 사용 시만 필요)
+         *
+         * @param giteaUrl Gitea 서버 URL
+         * @return Builder 인스턴스
+         */
         public Builder giteaUrl(String giteaUrl) {
             this.giteaUrl = giteaUrl;
             return this;
         }
 
+        /**
+         * Claude 모델 설정
+         *
+         * @param model Claude 모델명
+         * @return Builder 인스턴스
+         */
         public Builder model(String model) {
             this.model = model;
             return this;
         }
 
+        /**
+         * 리뷰 언어 설정
+         *
+         * @param language 언어 코드 ("ko" 또는 "en")
+         * @return Builder 인스턴스
+         */
         public Builder language(String language) {
             this.language = language;
             return this;
         }
 
+        /**
+         * 리뷰할 파일 확장자 설정
+         *
+         * @param fileExtensions 파일 확장자 (쉼표로 구분)
+         * @return Builder 인스턴스
+         */
         public Builder fileExtensions(String fileExtensions) {
             this.fileExtensions = fileExtensions;
             return this;
         }
 
+        /**
+         * 최대 토큰 수 설정
+         *
+         * @param maxTokens 최대 토큰 수
+         * @return Builder 인스턴스
+         */
         public Builder maxTokens(int maxTokens) {
             this.maxTokens = maxTokens;
             return this;
         }
 
+        /**
+         * ClaudeReviewer 인스턴스 생성
+         *
+         * @return ClaudeReviewer 인스턴스
+         * @throws IOException API 연결 실패 시
+         */
         public ClaudeReviewer build() throws IOException {
             // 환경 변수에서 자동 감지 (설정 안 된 경우)
             if (githubToken == null) {

@@ -26,6 +26,8 @@ public class ClaudeService {
 
     /**
      * 생성자 주입
+     *
+     * @param config 리뷰 설정
      */
     public ClaudeService(ReviewConfig config) {
         this.config = config;
@@ -108,6 +110,10 @@ public class ClaudeService {
 
     /**
      * 코드 리뷰 수행
+     *
+     * @param changes 변경된 파일 목록
+     * @return 리뷰 결과 텍스트
+     * @throws IOException API 호출 실패 시
      */
     public String reviewCode(List<FileChange> changes) throws IOException {
         String changesText = formatChanges(changes);

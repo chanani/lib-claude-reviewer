@@ -34,6 +34,8 @@ public class ReviewConfig {
 
     /**
      * 플랫폼 판별 (Gitea URL이 있으면 Gitea, 없으면 GitHub)
+     *
+     * @return Gitea 사용 여부
      */
     public boolean isGitea() {
         return giteaUrl != null && !giteaUrl.isEmpty();
@@ -41,6 +43,8 @@ public class ReviewConfig {
 
     /**
      * 환경 변수에서 설정 생성
+     *
+     * @return 환경 변수 기반 ReviewConfig 인스턴스
      */
     public static ReviewConfig fromEnvironment() {
         String fileExts = getEnvOrDefault("FILE_EXTENSIONS", ".java,.kt,.xml,.gradle");

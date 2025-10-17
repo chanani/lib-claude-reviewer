@@ -15,6 +15,11 @@ import java.io.IOException;
 public class ServiceFactory {
     private final ReviewConfig config;
 
+    /**
+     * ServiceFactory 생성자
+     *
+     * @param config 리뷰 설정
+     */
     public ServiceFactory(ReviewConfig config) {
         this.config = config;
     }
@@ -22,6 +27,9 @@ public class ServiceFactory {
     /**
      * GitService 인스턴스 생성
      * 플랫폼에 따라 GitHubServiceImpl 또는 GiteaServiceImpl 반환
+     *
+     * @return GitService 인스턴스
+     * @throws IOException API 연결 실패 시
      */
     public GitService createGitService() throws IOException {
         if (config.isGitea()) {
@@ -33,6 +41,8 @@ public class ServiceFactory {
 
     /**
      * ClaudeService 인스턴스 생성
+     *
+     * @return ClaudeService 인스턴스
      */
     public ClaudeService createClaudeService() {
         return new ClaudeService(config);
@@ -40,6 +50,9 @@ public class ServiceFactory {
 
     /**
      * ReviewService 인스턴스 생성 (의존성 주입)
+     *
+     * @return ReviewService 인스턴스
+     * @throws IOException API 연결 실패 시
      */
     public ReviewService createReviewService() throws IOException {
         GitService gitService = createGitService();

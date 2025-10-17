@@ -17,6 +17,9 @@ public class FileChange {
 
     /**
      * 파일이 지정된 확장자와 매칭되는지 확인
+     *
+     * @param extensions 확장자 목록
+     * @return 매칭 여부
      */
     public boolean matchesExtensions(List<String> extensions) {
         return extensions.stream()

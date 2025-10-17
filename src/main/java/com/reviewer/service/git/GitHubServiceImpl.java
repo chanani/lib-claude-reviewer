@@ -21,6 +21,9 @@ public class GitHubServiceImpl implements GitService {
 
     /**
      * 생성자 주입
+     *
+     * @param config 리뷰 설정
+     * @throws IOException GitHub API 연결 실패 시
      */
     public GitHubServiceImpl(ReviewConfig config) throws IOException {
         this.config = config;

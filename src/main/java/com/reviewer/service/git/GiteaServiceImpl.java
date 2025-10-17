@@ -23,6 +23,8 @@ public class GiteaServiceImpl implements GitService {
 
     /**
      * 생성자 주입
+     *
+     * @param config 리뷰 설정
      */
     public GiteaServiceImpl(ReviewConfig config) {
         this.config = config;

@@ -13,11 +13,17 @@ public interface GitService {
 
     /**
      * PR에서 변경된 파일 목록 조회
+     *
+     * @return 변경된 파일 목록
+     * @throws IOException API 호출 실패 시
      */
     List<FileChange> getChangedFiles() throws IOException;
 
     /**
      * PR에 댓글 작성
+     *
+     * @param comment 작성할 댓글 내용
+     * @throws IOException API 호출 실패 시
      */
     void postComment(String comment) throws IOException;
 }

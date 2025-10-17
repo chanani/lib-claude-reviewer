@@ -8,6 +8,11 @@ import com.reviewer.service.ReviewService;
  * 애플리케이션 진입점
  */
 public class ClaudeReviewerApplication {
+    /**
+     * 메인 메서드
+     *
+     * @param args 명령줄 인수
+     */
     public static void main(String[] args) {
         try {
             // 1. 설정 로드
