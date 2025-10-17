@@ -19,7 +19,6 @@ public class ClaudeReviewerApplication {
 
             // 3. 리뷰 실행
             reviewService.executeReview();
-
         } catch (Exception e) {
             System.err.println("❌ 에러 발생: " + e.getMessage());
             e.printStackTrace();
