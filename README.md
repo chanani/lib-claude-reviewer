@@ -30,8 +30,6 @@ import com.reviewer.ClaudeReviewer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        // 환경 변수에서 자동으로 설정 감지
-        // GITEA_URL이 있으면 Gitea, 없으면 GitHub
         ClaudeReviewer.builder()
                 .build()
                 .executeFullReview();
@@ -49,7 +47,7 @@ public class Main {
 
 ---
 
-#### GitHub Actions 설정
+### [GitHub Actions 설정]
 
 ⚠️ **중요: Workflow 파일 생성은 필수입니다!**
 
@@ -126,7 +124,7 @@ git push
 
 ---
 
-#### Gitea Actions 설정
+### [Gitea Actions 설정]
 
 ⚠️ **중요: Gitea Actions는 GitHub Actions와 호환되는 워크플로우를 사용합니다!**
 
